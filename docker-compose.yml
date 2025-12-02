@@ -1,0 +1,39 @@
+
+services:
+  db:
+    image: mysql:8.0
+    volumes:
+      - ./mysql/datadir:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+  nginx:
+    image: nginx
+    ports:
+      - "80:80"
+      - "433:433"
+    volumes:
+    - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    - ./nginx/logs:/var/log/nginx
+    - ./codeigniter/scr:/var/www/html
+    networks:
+      - dev
+  php-fpm:
+    build: 
+      context: .
+      dockerfile: ./Dockerfile.dev
+    volumes:
+      - ./codeigniter/scr:/var/www/html
+    networks:
+      - dev
+  redis-session:
+    image: redis
+    networks:
+      - dev
+
+networks:
+  dev:
+    driver: bridge
