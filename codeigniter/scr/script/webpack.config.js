@@ -13,5 +13,12 @@ module.exports = {
         identifier:path.resolve(__dirname, 'node_modules'),
         $: 'jquery',
     }),
-  ]
+  ],
+  devServer:{
+    headers:{
+        "Access-Control-Allow-Origin": "*",
+    },
+    server: 'https',
+    port: '8080'
+  }
 };
